@@ -24,62 +24,55 @@ public class transactionYear {
         Path input = new Path("in/operacoes_comerciais_inteira.csv");
 
         // arquivo de saida
-        Path output = new Path("output/pergunta2.txt");
+        Path output = new Path("output/q2.txt");
 
         // criacao do job e seu nome
-        Job j = new Job(c, "jobano");
+        Job job = new Job(c, "transactionYear");
 
         // registro das classes
-        j.setJarByClass(transactionYear.class);
-        j.setMapperClass(Map2.class);
-        j.setReducerClass(Reduce2.class);
+        job.setJarByClass(transactionYear.class);
+        job.setMapperClass(Map.class);
+        job.setReducerClass(Reduce.class);
 
         // definicao dos tipos de saida
-        j.setMapOutputKeyClass(Text.class);
-        j.setMapOutputValueClass(IntWritable.class);
-        j.setOutputKeyClass(Text.class);
-        j.setOutputValueClass(IntWritable.class);
+        job.setMapOutputKeyClass(Text.class);
+        job.setMapOutputValueClass(IntWritable.class);
+        job.setOutputKeyClass(Text.class);
+        job.setOutputValueClass(IntWritable.class);
 
         // cadastro dos arquivos de entrada e saida
-        FileInputFormat.addInputPath(j, input);
-        FileOutputFormat.setOutputPath(j, output);
+        FileInputFormat.addInputPath(job, input);
+        FileOutputFormat.setOutputPath(job, output);
 
         // lanca o job e aguarda sua execucao
-        System.exit(j.waitForCompletion(true) ? 0 : 1);
+        System.exit(job.waitForCompletion(true) ? 0 : 1);
     }
 
-    public static class Map2 extends Mapper<LongWritable, Text, Text, IntWritable> {
+    public static class Map extends Mapper<LongWritable, Text, Text, IntWritable> {
+        public void map(LongWritable key, Text value, Context con) throws IOException, InterruptedException {
+            String line = value.toString();
 
-        // Funcao de map
-        public void map(LongWritable key, Text value, Context con)
-                throws IOException, InterruptedException {
-            String linha = value.toString();
-
-            if (linha.startsWith("country")){
+            if (line.startsWith("country_or_area")){
                 return;
             }
 
-            String[] col = linha.split(";");
+            String[] column = line.split(";");
 
-            Text chave = new Text(col[1]);
+            Text keyWord = new Text(column[1]);
 
-            con.write(chave,new IntWritable(1));
+            con.write(keyWord, new IntWritable(1));
         }
     }
 
-    public static class Reduce2 extends Reducer<Text, IntWritable, Text, IntWritable> {
+    public static class Reduce extends Reducer<Text, IntWritable, Text, IntWritable> {
+        public void reduce(Text key, Iterable<IntWritable> values, Context con) throws IOException, InterruptedException {
+            int sum = 0;
 
-        // Funcao de reduce
-        public void reduce(Text key, Iterable<IntWritable> values, Context con)
-                throws IOException, InterruptedException {
-
-            int soma = 0;
-
-            for (IntWritable valor:values){
-                soma += valor.get();
+            for (IntWritable value : values){
+                sum += value.get();
             }
 
-            con.write(key,new IntWritable(soma));
+            con.write(key,new IntWritable(sum));
         }
     }
 }

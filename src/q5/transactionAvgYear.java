@@ -1,9 +1,8 @@
-package q4;
+package q5;
+
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
-import org.apache.hadoop.io.IntWritable;
-import org.apache.hadoop.io.LongWritable;
-import org.apache.hadoop.io.Text;
+import org.apache.hadoop.io.*;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.Mapper;
 import org.apache.hadoop.mapreduce.Reducer;
@@ -14,31 +13,30 @@ import org.apache.log4j.BasicConfigurator;
 
 import java.io.IOException;
 
-public class transactionFlow {
+public class transactionAvgYear {
     public static void main(String[] args) throws Exception {
         BasicConfigurator.configure();
 
         Configuration c = new Configuration();
-        String[] files = new GenericOptionsParser(c, args).getRemainingArgs();
         // arquivo de entrada
         Path input = new Path("in/operacoes_comerciais_inteira.csv");
 
         // arquivo de saida
-        Path output = new Path("output/pergunta4.txt");
+        Path output = new Path("output/pergunta5.txt");
 
         // criacao do job e seu nome
-        Job j = new Job(c, "jobano");
+        Job j = new Job(c, "job5");
 
         // registro das classes
-        j.setJarByClass(transactionFlow.class);
-        j.setMapperClass(Map4.class);
-        j.setReducerClass(Reduce4.class);
+        j.setJarByClass(transactionAvgYear.class);
+        j.setMapperClass(Map.class);
+        j.setReducerClass(Reduce5.class);
 
         // definicao dos tipos de saida
         j.setMapOutputKeyClass(Text.class);
-        j.setMapOutputValueClass(IntWritable.class);
+        j.setMapOutputValueClass(transactionAvgYearWritable.class);
         j.setOutputKeyClass(Text.class);
-        j.setOutputValueClass(IntWritable.class);
+        j.setOutputValueClass(LongWritable.class);
 
         // cadastro dos arquivos de entrada e saida
         FileInputFormat.addInputPath(j, input);
@@ -48,9 +46,7 @@ public class transactionFlow {
         System.exit(j.waitForCompletion(true) ? 0 : 1);
     }
 
-    public static class Map4 extends Mapper<LongWritable, Text, Text, IntWritable> {
-
-        // Funcao de map
+    public static class Map extends Mapper<LongWritable, Text, Text, transactionAvgYearWritable> {
         public void map(LongWritable key, Text value, Context con)
                 throws IOException, InterruptedException {
             String linha = value.toString();
@@ -61,25 +57,29 @@ public class transactionFlow {
 
             String[] col = linha.split(";");
 
-            Text chave = new Text(col[4]);
-
-            con.write(chave,new IntWritable(1));
+            if (col[0].equals("Brazil")){
+                con.write(new Text(col[0]),new transactionAvgYearWritable(Long.parseLong(col[5]),new Long(1)));
+            }
         }
     }
 
-    public static class Reduce4 extends Reducer<Text, IntWritable, Text, IntWritable> {
+    public static class Reduce5 extends Reducer<Text, transactionAvgYearWritable, Text, LongWritable> {
 
         // Funcao de reduce
-        public void reduce(Text key, Iterable<IntWritable> values, Context con)
+        public void reduce(Text key, Iterable<transactionAvgYearWritable> values, Context con)
                 throws IOException, InterruptedException {
 
-            int soma = 0;
+            long qtd = 0;
+            long soma = 0;
 
-            for (IntWritable valor:values){
-                soma += valor.get();
+            for (transactionAvgYearWritable valor:values){
+                qtd += valor.getQtd();
+                soma += valor.getValor();
             }
 
-            con.write(key,new IntWritable(soma));
+            long media = soma /qtd;
+
+            con.write(key,new LongWritable(media));
         }
     }
 }

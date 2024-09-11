@@ -16,21 +16,24 @@ import java.io.IOException;
 
 // Número de transações envolvendo o Brasil.
 public class transactionBrazil {
-    public static void main(String[] args) throws Exception  {
+    public static void main(String[] args) throws Exception {
         BasicConfigurator.configure();
         Configuration c = new Configuration();
-        // Job creation
-        Job job = Job.getInstance(c, "transactionBrazil");
+        String[] files = new GenericOptionsParser(c, args).getRemainingArgs();
 
-        // Input file
-        Path inputFile = new Path("in/operacoes_comerciais_inteira.csv");
-        // Output file
-        Path outputFile = new Path("output/question1.txt");
+        // Definição do caminho do input
+        Path input = new Path("in/operacoes_comerciais_inteira.csv");
 
-        // Set classes
+        // Definição do caminho do output
+        Path output = new Path("output/q1.txt");
+
+        // Criação do job e seu nome
+        Job job = new Job(c, "transactionBrazil");
+
+        // registro das classes
         job.setJarByClass(transactionBrazil.class);
-        job.setJarByClass(Map.class);
-        job.setJarByClass(Reduce.class);
+        job.setMapperClass(Map.class);
+        job.setReducerClass(Reduce.class);
 
         // definicao dos tipos de saida
         job.setMapOutputKeyClass(Text.class);
@@ -38,35 +41,32 @@ public class transactionBrazil {
         job.setOutputKeyClass(Text.class);
         job.setOutputValueClass(IntWritable.class);
 
-        // Input and Output files registration
-        FileInputFormat.addInputPath(job, inputFile);
-        FileOutputFormat.setOutputPath(job, outputFile);
+        // cadastro dos arquivos de entrada e saida
+        FileInputFormat.addInputPath(job, input);
+        FileOutputFormat.setOutputPath(job, output);
 
-        // Job and wait for execution
-        boolean success = job.waitForCompletion(true);
-        if (!success) {
-            System.err.println("Job failed.");
-        }
+        // lanca o job e aguarda sua execucao
+        System.exit(job.waitForCompletion(true) ? 0 : 1);
     }
 
-    public class Map extends Mapper<LongWritable, Text, Text, IntWritable> {
+    public static class Map extends Mapper <LongWritable, Text, Text, IntWritable> {
         public void map(LongWritable key, Text value, Context con) throws IOException, InterruptedException {
-            String linha = value.toString();
+            String line = value.toString();
 
-            if (linha.startsWith("country")) {
+            if (line.startsWith("country_or_area")){
                 return;
             }
 
-            String[] col = linha.split(";");
+            String[] column = line.split(";");
 
-            if (col[0].equals("Brazil")) {
-                Text chavesaida = new Text(col[0]);
-                con.write(chavesaida, new IntWritable(1));
+            if (column[0].equals("Brazil")) {
+                Text outputKey = new Text(column[0]);
+                con.write(outputKey, new IntWritable(1));
             }
         }
     }
 
-    public class Reduce extends Reducer<Text, IntWritable, Text, IntWritable> {
+    public static class Reduce extends Reducer<Text, IntWritable, Text, IntWritable> {
         public void reduce(Text key, Iterable<IntWritable> values, Context con) throws IOException, InterruptedException {
             int sum = 0;
 
@@ -74,8 +74,9 @@ public class transactionBrazil {
                 sum += value.get();
             }
 
-            con.write(key,new IntWritable(sum));
+            con.write(key, new IntWritable(sum));
         }
     }
 }
+
 
