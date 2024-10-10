@@ -8,7 +8,7 @@ Before running the project, make sure you have the following installed:
 - Java 8
 - IntelliJ IDEA
 - Hadoop configured
-- The required CSV file (available on [Google Drive](YOUR_CSV_URL))
+- The required CSV file (available on [Google Drive](https://drive.google.com/file/d/1N0xJ8YnlsS8BhvtiFc_KrotglyFrelFV/view?usp=sharing))
 
 ### How to run
 1. **Clone the repository**:
@@ -22,11 +22,14 @@ Before running the project, make sure you have the following installed:
 6. **Run the code** following the instructions.
 
 ### Files for questions
-- *Question 1*: Description of question 1
-- *Question 2*: Description of question 2
-- *Question 3*: Description of question 3
-- *Question 4*: Description of question 3
-- *Question 5*: Description of question 3
+- *[Question 1](https://github.com/diogobonet/bigdata-hadoop/tree/main/src/questoes/q1)*: Number of transactions involving Brazil.
+- *[Question 2](https://github.com/diogobonet/bigdata-hadoop/tree/main/src/questoes/q2)*: Number of transactions per year.
+- *[Question 3](https://github.com/diogobonet/bigdata-hadoop/tree/main/src/questoes/q3)*: Number of transactions by category.
+- *[Question 4](https://github.com/diogobonet/bigdata-hadoop/tree/main/src/questoes/q4)*: Number of transactions by type of flow.
+- *[Question 5](https://github.com/diogobonet/bigdata-hadoop/tree/main/src/questoes/q5)*: Average value of transactions per year in Brazil only.
+- *[Question 6](https://github.com/diogobonet/bigdata-hadoop/tree/main/src/questoes/q6)*: Most expensive and cheapest transaction in Brazil in 2016.
+- *[Question 7](https://github.com/diogobonet/bigdata-hadoop/tree/main/src/questoes/q7)*: Average value of transactions per year, considering only export-type transactions carried out in Brazil.
+- *[Question 8](https://github.com/diogobonet/bigdata-hadoop/tree/main/src/questoes/q8)*: Transaction with the highest and lowest price (based on the amount column), by year and country.
 
 ## Processamento de Big Data com Hadoop e Java 🇧🇷
 
@@ -38,7 +41,7 @@ Antes de rodar o projeto, certifique-se de que você tem o seguinte instalado:
 - Java 8
 - IntelliJ IDEA
 - Hadoop configurado
-- O arquivo CSV necessário (disponível no [Google Drive](URL_DO_SEU_CSV))
+- O arquivo CSV necessário (disponível no [Google Drive](https://drive.google.com/file/d/1N0xJ8YnlsS8BhvtiFc_KrotglyFrelFV/view?usp=sharing))
 
 ### Instruções para execução
 1. **Clone o repositório**:
@@ -52,9 +55,14 @@ Antes de rodar o projeto, certifique-se de que você tem o seguinte instalado:
 6. **Execute o código** de acordo com as instruções abaixo.
 
 ### Arquivos das questões
-- *Arquivo 1*: Descrição da questão 1
-- *Arquivo 2*: Descrição da questão 2
-- *Arquivo 3*: Descrição da questão 3
+- *[Arquivo 1](https://github.com/diogobonet/bigdata-hadoop/tree/main/src/questoes/q1)*: Número de transações envolvendo o Brasil.
+- *[Arquivo 2](https://github.com/diogobonet/bigdata-hadoop/tree/main/src/questoes/q2)*: Número de transações por ano.
+- *[Arquivo 3](https://github.com/diogobonet/bigdata-hadoop/tree/main/src/questoes/q3)*: Número de transações por categoria.
+- *[Arquivo 4](https://github.com/diogobonet/bigdata-hadoop/tree/main/src/questoes/q4)*: Número de transações por tipo de fluxo (flow).
+- *[Arquivo 5](https://github.com/diogobonet/bigdata-hadoop/tree/main/src/questoes/q5)*: Valor médio das transações por ano somente no Brasil.
+- *[Arquivo 6](https://github.com/diogobonet/bigdata-hadoop/tree/main/src/questoes/q6)*: Transação mais cara e mais barata no Brasil em 2016.
+- *[Arquivo 7](https://github.com/diogobonet/bigdata-hadoop/tree/main/src/questoes/q7)*: Valor médio das transações por ano, considerando somente as transações do tipo exportação (Export) realizadas no Brasil.
+- *[Arquivo 8](https://github.com/diogobonet/bigdata-hadoop/tree/main/src/questoes/q8)*: Transação com o maior e menor preço (com base na coluna amount), por ano e país.
 
 ---
 
